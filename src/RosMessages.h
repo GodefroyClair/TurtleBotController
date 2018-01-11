@@ -9,6 +9,17 @@
 #ifndef RosMessages_h
 #define RosMessages_h
 
+#include <stdint.h>
+
+
+typedef enum
+{
+    ID_Topic = 0,
+    
+    ID_SensorState = 125,
+    ID_IMU = 126,
+    
+} TurtleBot_TopicID;
 
 
 typedef struct
@@ -52,6 +63,12 @@ typedef struct
     
 } RosIMU;
 
+
+int deserializeTopic(unsigned char *inbuffer);
+int deserializeSensorState(unsigned char *inbuffer);
+int deserializeIMU(unsigned char *inbuffer);
+int deserializeHeader(unsigned char *inbuffer, RosHeader* header);
+int deserializeVector3(unsigned char *inbuffer , RosVector3* vector);
 
 
 #endif /* RosMessages_h */
