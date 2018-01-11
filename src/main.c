@@ -14,7 +14,7 @@
 #include <fcntl.h>
 #include <GroundBase.h>
 
-
+#include "RosMessages.h"
 
 
 typedef enum
@@ -22,8 +22,8 @@ typedef enum
     TopicID_
 } TurtleBot_TopicID;
 
-void
-set_blocking (int fd, int should_block)
+/*
+void set_blocking (int fd, int should_block)
 {
     struct termios tty;
     memset (&tty, 0, sizeof tty);
@@ -43,6 +43,7 @@ set_blocking (int fd, int should_block)
         //error_message ("error %d setting term attributes", errno);
     }
 }
+ */
 
 int
 set_interface_attribs (int fd, int speed, int parity)
@@ -86,7 +87,7 @@ set_interface_attribs (int fd, int speed, int parity)
     }
     return 0;
 }
-
+/*
 int setRTS( int fd , int v, int millis)
 {
     int RTS_flag;
@@ -100,10 +101,12 @@ int setRTS( int fd , int v, int millis)
     return -1;
     
 }
-
+*/
 static int deserialize(unsigned char *inbuffer);
 static int deserializeSensorState(unsigned char *inbuffer);
-
+static int deserializeIMU(unsigned char *inbuffer);
+static int deserializeHeader(unsigned char *inbuffer, RosHeader* header);
+static int deserializeVector3(unsigned char *inbuffer , RosVector3* vector);
 
 int main(int argc, const char * argv[])
 {
@@ -126,10 +129,10 @@ int main(int argc, const char * argv[])
     
     
     
-    const char* requestTopics = "\xff\xff\x00\x00\x00\x00\xff";
-               const char* r2 = "\xff\xfe\x00\x00\xff\x00\x00\xff";
+    //const char* requestTopicsV1 = "\xff\xff\x00\x00\x00\x00\xff";
+    const char* requestTopicsV2 = "\xff\xfe\x00\x00\xff\x00\x00\xff";
     //self.port.write("\xff" + self.protocol_ver + "\x00\x00\xff\x00\x00\xff")
-    if( write(fd, r2, 8) > 0 )
+    if( write(fd, requestTopicsV2, 8) > 0 )
     {
         printf("Write ok");
     }
@@ -277,11 +280,16 @@ int main(int argc, const char * argv[])
         
         if( topic_id == 0)
         {
-            deserialize( msgBuf);
+            //deserialize( msgBuf);
         }
         else if( topic_id == 125)
         {
-            deserializeSensorState(msgBuf);
+            //deserializeSensorState(msgBuf);
+        }
+        
+        else if( topic_id == 126)
+        {
+            deserializeIMU(msgBuf);
         }
         
         else
@@ -319,6 +327,31 @@ int main(int argc, const char * argv[])
     return 0;
 }
 
+
+static int deserializeAvrFloat64(const unsigned char* inbuffer, float* f)
+{
+    uint32_t* val = (uint32_t*)f;
+    inbuffer += 3;
+    
+    // Copy truncated mantissa.
+    *val = ((uint32_t)(*(inbuffer++)) >> 5 & 0x07);
+    *val |= ((uint32_t)(*(inbuffer++)) & 0xff) << 3;
+    *val |= ((uint32_t)(*(inbuffer++)) & 0xff) << 11;
+    *val |= ((uint32_t)(*inbuffer) & 0x0f) << 19;
+    
+    // Copy truncated exponent.
+    uint32_t exp = ((uint32_t)(*(inbuffer++)) & 0xf0)>>4;
+    exp |= ((uint32_t)(*inbuffer) & 0x7f) << 4;
+    if (exp != 0)
+    {
+        *val |= ((exp) - 1023 + 127) << 23;
+    }
+    
+    // Copy negative sign.
+    *val |= ((uint32_t)(*(inbuffer++)) & 0x80) << 24;
+    
+    return 8;
+}
 
 
 
@@ -453,6 +486,88 @@ static int deserializeSensorState(unsigned char *inbuffer)
     offset += sizeof(battery);
     
     
-    printf(" %i %i\n " , left_encoder  , right_encoder);
+    //printf(" %i %i\n " , left_encoder  , right_encoder);
+    return offset;
+}
+
+
+
+static int deserializeHeader(unsigned char *inbuffer , RosHeader* header)
+{
+    int offset = 0;
+    header->seq =  ((uint32_t) (*(inbuffer + offset)));
+    header->seq |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+    header->seq |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+    header->seq |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+    offset += sizeof(header->seq);
+    
+    header->stamp.sec =  ((uint32_t) (*(inbuffer + offset)));
+    header->stamp.sec |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+    header->stamp.sec |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+    header->stamp.sec |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+    offset += sizeof(header->stamp.sec);
+    
+    header->stamp.nsec =  ((uint32_t) (*(inbuffer + offset)));
+    header->stamp.nsec |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+    header->stamp.nsec |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+    header->stamp.nsec |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+    offset += sizeof(header->stamp.nsec);
+    uint32_t length_frame_id;
+    memcpy(&length_frame_id, (inbuffer + offset), sizeof(uint32_t));
+    offset += 4;
+    for(unsigned int k= offset; k< offset+length_frame_id; ++k){
+        inbuffer[k-1]=inbuffer[k];
+    }
+    inbuffer[offset+length_frame_id-1]=0;
+    header->frame_id = (char *)(inbuffer + offset-1);
+    offset += length_frame_id;
+    return offset;
+}
+
+static int deserializeQuaternion(unsigned char *inbuffer , RosQuaternion *quaternion)
+{
+    int offset = 0;
+    offset += deserializeAvrFloat64(inbuffer + offset, &(quaternion->x));
+    offset += deserializeAvrFloat64(inbuffer + offset, &(quaternion->y));
+    offset += deserializeAvrFloat64(inbuffer + offset, &(quaternion->z));
+    offset += deserializeAvrFloat64(inbuffer + offset, &(quaternion->w));
+    return offset;
+}
+
+static int deserializeVector3(unsigned char *inbuffer , RosVector3* vector)
+{
+    int offset = 0;
+    offset += deserializeAvrFloat64(inbuffer + offset, &(vector->x));
+    offset += deserializeAvrFloat64(inbuffer + offset, &(vector->y));
+    offset += deserializeAvrFloat64(inbuffer + offset, &(vector->z));
+    return offset;
+}
+
+static int deserializeIMU(unsigned char *inbuffer)
+{
+    RosIMU imu;
+    
+    int offset = 0;
+    offset += deserializeHeader( inbuffer + offset ,&imu.header);           // this->header.deserialize(inbuffer + offset);
+    offset +=  deserializeQuaternion(inbuffer + offset, &imu.orientation);  // this->orientation.deserialize(inbuffer + offset);
+    for( uint32_t i = 0; i < 9; i++)
+    {
+        offset += deserializeAvrFloat64(inbuffer + offset, &(imu.orientation_covariance[i] ) );
+    }
+    offset += deserializeVector3(inbuffer + offset, &imu.angular_velocity);// this->angular_velocity.deserialize(inbuffer + offset);
+    
+    for( uint32_t i = 0; i < 9; i++)
+    {
+        offset += deserializeAvrFloat64(inbuffer + offset, &(imu.angular_velocity_covariance[i]));
+    }
+    offset += deserializeVector3(inbuffer + offset , &imu.linear_acceleration);// this->linear_acceleration.deserialize(inbuffer + offset);
+    
+    for( uint32_t i = 0; i < 9; i++)
+    {
+        offset += deserializeAvrFloat64(inbuffer + offset, &(imu.linear_acceleration_covariance[i] ) );
+    }
+    
+    printf("IMU %i (%f,%f,%f,%f) \n" , imu.header.stamp.sec , imu.orientation.w , imu.orientation.x ,imu.orientation.y ,imu.orientation.z);
+    
     return offset;
 }
