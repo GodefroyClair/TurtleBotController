@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		591B52FF2007CAD200BDBC16 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B52FE2007CAD200BDBC16 /* main.c */; };
 		591B53022007DD6D00BDBC16 /* RosMessages.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53012007DD6D00BDBC16 /* RosMessages.c */; };
 		591B53052007DED600BDBC16 /* TurtleBotSerial.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53042007DED600BDBC16 /* TurtleBotSerial.c */; };
+		591B53082008B4C100BDBC16 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53072008B4C000BDBC16 /* main.c */; };
 		59AB111E200632800030AFC0 /* libGroundBase.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 59AB111D200632800030AFC0 /* libGroundBase.dylib */; };
 /* End PBXBuildFile section */
 
@@ -26,11 +26,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		591B52FE2007CAD200BDBC16 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		591B53002007CD9700BDBC16 /* RosMessages.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RosMessages.h; sourceTree = "<group>"; };
 		591B53012007DD6D00BDBC16 /* RosMessages.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = RosMessages.c; sourceTree = "<group>"; };
 		591B53032007DED600BDBC16 /* TurtleBotSerial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TurtleBotSerial.h; sourceTree = "<group>"; };
 		591B53042007DED600BDBC16 /* TurtleBotSerial.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = TurtleBotSerial.c; sourceTree = "<group>"; };
+		591B53072008B4C000BDBC16 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		59AB11122006323E0030AFC0 /* TurtleBotController */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TurtleBotController; sourceTree = BUILT_PRODUCTS_DIR; };
 		59AB111D200632800030AFC0 /* libGroundBase.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGroundBase.dylib; path = ../../../../../../../usr/local/lib/libGroundBase.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -50,7 +50,6 @@
 		591B52FD2007CAD200BDBC16 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				591B52FE2007CAD200BDBC16 /* main.c */,
 				591B53032007DED600BDBC16 /* TurtleBotSerial.h */,
 				591B53042007DED600BDBC16 /* TurtleBotSerial.c */,
 				591B53002007CD9700BDBC16 /* RosMessages.h */,
@@ -59,9 +58,18 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		591B53062008B4C000BDBC16 /* example */ = {
+			isa = PBXGroup;
+			children = (
+				591B53072008B4C000BDBC16 /* main.c */,
+			);
+			path = example;
+			sourceTree = "<group>";
+		};
 		59AB11092006323E0030AFC0 = {
 			isa = PBXGroup;
 			children = (
+				591B53062008B4C000BDBC16 /* example */,
 				591B52FD2007CAD200BDBC16 /* src */,
 				59AB11132006323E0030AFC0 /* Products */,
 				59AB111C2006327F0030AFC0 /* Frameworks */,
@@ -141,8 +149,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				591B53082008B4C100BDBC16 /* main.c in Sources */,
 				591B53022007DD6D00BDBC16 /* RosMessages.c in Sources */,
-				591B52FF2007CAD200BDBC16 /* main.c in Sources */,
 				591B53052007DED600BDBC16 /* TurtleBotSerial.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

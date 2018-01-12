@@ -9,6 +9,12 @@
 #ifndef RosMessages_h
 #define RosMessages_h
 
+
+/*
+ Definitions are mostly taken from here :
+ https://github.com/ROBOTIS-GIT/OpenCR/tree/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/sensor_msgs
+ 
+ */
 #include <stdint.h>
 
 
