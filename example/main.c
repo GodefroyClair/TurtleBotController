@@ -19,6 +19,7 @@
 // return 0 to stop the loop
 static int onData( int topicID , unsigned char *inbuffer )
 {
+    printf("Received Topic #%i\n" , topicID);
     return 1;
 }
 

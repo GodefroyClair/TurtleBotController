@@ -264,6 +264,65 @@ int runProcessLoop( int fd , int* stopFlag , OnDataCallback dataCallback)
     return 1;
 }
 
+int sendCommands( int fd, const RosTwist* cmd)
+{
+    if( fd <= 0 || cmd == NULL)
+        return 0;
+    
+    return 1;
+}
+
+
+int sendMessage( int fd, int topic, const unsigned char* msgBuffer , size_t messageSize)
+{
+    if( fd <= 0 || msgBuffer == NULL || topic < 0 || messageSize == 0)
+        return 0;
+    
+    if( messageSize > MAX_PAYLOAD_SIZE)
+    {
+        fprintf(stderr, "[sendMessage] Warning : message size (%zi) exceeds MAX_PAYLOAD_SIZE  (%zi) " , messageSize , MAX_PAYLOAD_SIZE);
+        return 0;
+    }
+    
+    
+    
+                                        ;
+    const size_t totalMsgSize = MSG_HeaderSize + messageSize;
+    
+    // msg_len_checksum = 255 - ( ((length&255) + (length>>8))%256 )
+    const char msg_len_checksum = 255 - ( ((messageSize&255) + (messageSize>>8))%256 );
+    
+    
+    const char msg_checksum = 0;
+    static uint8_t msgBuf[MAX_PAYLOAD_SIZE + MSG_HeaderSize] = { 0};
+    
+    memset(msgBuf, 0,MAX_PAYLOAD_SIZE);
+
+    msgBuf[0] = START_FLAG;
+    msgBuf[1] = PROTO_V2;
+    msgBuf[2] = (char) messageSize&255;
+    msgBuf[3] = (char) messageSize>>8;
+    msgBuf[4] = msg_len_checksum;
+    msgBuf[5] = (char) topic&255;
+    msgBuf[6] = (char) topic>>8;
+    
+    const int offset = 7;
+    memcpy(msgBuf + offset, msgBuffer, messageSize);
+    
+    msgBuf[offset + messageSize] = msg_checksum;
+    
+    /*
+     msg_checksum = 255 - ( ((topic&255) + (topic>>8) + sum([ord(x) for x in msg]))%256 )
+     data = "\xff" + self.protocol_ver  + chr(length&255) + chr(length>>8) + chr(msg_len_checksum) + chr(topic&255) + chr(topic>>8)
+     data = data + msg + chr(msg_checksum)
+     self.port.write(data)
+     */
+    
+    return write(fd, msgBuf, totalMsgSize) == totalMsgSize;
+}
+
+
+
 
 /*
  void set_blocking (int fd, int should_block)
