@@ -210,6 +210,7 @@ int runProcessLoop( int fd , int* stopFlag , OnDataCallback dataCallback)
         if(dataCallback(topic_id , msgBuf) == 0)
         {
             run = 0;
+            break;
         }
         /*
         
@@ -257,6 +258,8 @@ int runProcessLoop( int fd , int* stopFlag , OnDataCallback dataCallback)
          */
         
     }
+    
+    *stopFlag = 0;
     
     return 1;
 }

@@ -9,22 +9,18 @@
 #include <stdio.h>
 
 
-//#include <sys/ioctl.h> //ioctl() call defenitions
 #include <unistd.h> // write read close
 #include <string.h> // memset
-
-
-
 
 #include "TurtleBotSerial.h"
 #include "RosMessages.h"
 
 
+// return 0 to stop the loop
 static int onData( int topicID , unsigned char *inbuffer )
 {
     return 1;
 }
-
 
 int main(int argc, const char * argv[])
 {

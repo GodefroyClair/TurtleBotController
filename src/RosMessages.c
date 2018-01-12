@@ -10,6 +10,9 @@
 #include <stdio.h>
 #include "RosMessages.h"
 
+/* **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** */
+
+// https://github.com/ROBOTIS-GIT/OpenCR/blob/3efe545bb3299d6a4841fd7a0943fac6972a3150/arduino/opencr_arduino/opencr/libraries/turtlebot3_ros_lib/ros/msg.h
 
 int deserializeAvrFloat64(const unsigned char* inbuffer, float* f)
 {
@@ -37,22 +40,55 @@ int deserializeAvrFloat64(const unsigned char* inbuffer, float* f)
 }
 
 
+int serializeAvrFloat64(unsigned char* outbuffer, const float f)
+{
+    const int32_t* val = (int32_t*) &f;
+    int32_t exp = ((*val >> 23) & 255);
+    if (exp != 0)
+    {
+        exp += 1023 - 127;
+    }
+    
+    int32_t sig = *val;
+    *(outbuffer++) = 0;
+    *(outbuffer++) = 0;
+    *(outbuffer++) = 0;
+    *(outbuffer++) = (sig << 5) & 0xff;
+    *(outbuffer++) = (sig >> 3) & 0xff;
+    *(outbuffer++) = (sig >> 11) & 0xff;
+    *(outbuffer++) = ((exp << 4) & 0xF0) | ((sig >> 19) & 0x0F);
+    *(outbuffer++) = (exp >> 4) & 0x7F;
+    
+    // Mark negative bit as necessary.
+    if (f < 0)
+    {
+        *(outbuffer - 1) |= 0x80;
+    }
+    
+    return 8;
+}
+
+/* **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** */
+
+// https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/rosserial_msgs/TopicInfo.h
 
 int deserializeTopic(unsigned char *inbuffer)
 {
     
-    
+    RosTopicInfo topicInfo;
+    /*
     uint16_t topic_id;
     const char* topic_name;
     const char* message_type;
     const char* md5sum;
     int32_t buffer_size;
+     */
     
     int offset = 0;
-    topic_id =  ((uint16_t) (*(inbuffer + offset)));
-    topic_id |= ((uint16_t) (*(inbuffer + offset + 1))) << (8 * 1);
+    topicInfo.topic_id =  ((uint16_t) (*(inbuffer + offset)));
+    topicInfo.topic_id |= ((uint16_t) (*(inbuffer + offset + 1))) << (8 * 1);
     
-    offset += sizeof( topic_id );
+    offset += sizeof( topicInfo.topic_id );
     uint32_t length_topic_name;
     memcpy(&length_topic_name, (inbuffer + offset), sizeof(uint32_t));
     offset += 4;
@@ -60,7 +96,7 @@ int deserializeTopic(unsigned char *inbuffer)
         inbuffer[k-1]=inbuffer[k];
     }
     inbuffer[offset+length_topic_name-1]=0;
-    topic_name = (char *)(inbuffer + offset-1);
+    topicInfo.topic_name = (char *)(inbuffer + offset-1);
     offset += length_topic_name;
     uint32_t length_message_type;
     memcpy(&length_message_type, (inbuffer + offset), sizeof(uint32_t));
@@ -69,7 +105,7 @@ int deserializeTopic(unsigned char *inbuffer)
         inbuffer[k-1]=inbuffer[k];
     }
     inbuffer[offset+length_message_type-1]=0;
-    message_type = (char *)(inbuffer + offset-1);
+    topicInfo.message_type = (char *)(inbuffer + offset-1);
     offset += length_message_type;
     uint32_t length_md5sum;
     memcpy(&length_md5sum, (inbuffer + offset), sizeof(uint32_t));
@@ -78,7 +114,7 @@ int deserializeTopic(unsigned char *inbuffer)
         inbuffer[k-1]=inbuffer[k];
     }
     inbuffer[offset+length_md5sum-1]=0;
-    md5sum = (char *)(inbuffer + offset-1);
+    topicInfo.md5sum = (char *)(inbuffer + offset-1);
     offset += length_md5sum;
     union {
         int32_t real;
@@ -89,16 +125,16 @@ int deserializeTopic(unsigned char *inbuffer)
     u_buffer_size.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
     u_buffer_size.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
     u_buffer_size.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-    buffer_size = u_buffer_size.real;
-    offset += sizeof(buffer_size);
+    topicInfo.buffer_size = u_buffer_size.real;
+    offset += sizeof( topicInfo.buffer_size);
     
-    printf("Got topic_id %i topic_name '%s' message_type '%s'\n" , topic_id , topic_name , message_type );
+    printf("Got topic_id %i topic_name '%s' message_type '%s'\n" , topicInfo.topic_id , topicInfo.topic_name , topicInfo.message_type );
     
     
     return offset;
 }
 
-
+/* **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** */
 
 
 int deserializeSensorState(unsigned char *inbuffer)
@@ -173,7 +209,9 @@ int deserializeSensorState(unsigned char *inbuffer)
     return offset;
 }
 
+/* **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** */
 
+// // https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/std_msgs/Header.h
 
 int deserializeHeader(unsigned char *inbuffer , RosHeader* header)
 {
@@ -207,6 +245,10 @@ int deserializeHeader(unsigned char *inbuffer , RosHeader* header)
     return offset;
 }
 
+/* **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** */
+
+// // https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/geometry_msgs/Quaternion.h
+
 int deserializeQuaternion(unsigned char *inbuffer , RosQuaternion *quaternion)
 {
     int offset = 0;
@@ -217,14 +259,9 @@ int deserializeQuaternion(unsigned char *inbuffer , RosQuaternion *quaternion)
     return offset;
 }
 
-int deserializeVector3(unsigned char *inbuffer , RosVector3* vector)
-{
-    int offset = 0;
-    offset += deserializeAvrFloat64(inbuffer + offset, &(vector->x));
-    offset += deserializeAvrFloat64(inbuffer + offset, &(vector->y));
-    offset += deserializeAvrFloat64(inbuffer + offset, &(vector->z));
-    return offset;
-}
+/* **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** */
+
+// https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/sensor_msgs/Imu.h
 
 int deserializeIMU(unsigned char *inbuffer)
 {
@@ -252,5 +289,39 @@ int deserializeIMU(unsigned char *inbuffer)
     
     printf("IMU %i (%f,%f,%f,%f) \n" , imu.header.stamp.sec , imu.orientation.w , imu.orientation.x ,imu.orientation.y ,imu.orientation.z);
     
+    return offset;
+}
+
+/* **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** */
+
+// // https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/geometry_msgs/Vector3.h
+
+int deserializeVector3(unsigned char *inbuffer , RosVector3* vector)
+{
+    int offset = 0;
+    offset += deserializeAvrFloat64(inbuffer + offset, &(vector->x));
+    offset += deserializeAvrFloat64(inbuffer + offset, &(vector->y));
+    offset += deserializeAvrFloat64(inbuffer + offset, &(vector->z));
+    return offset;
+}
+
+int serializeVector3(unsigned char *outbuffer, const RosVector3* vector) 
+{
+    int offset = 0;
+    offset += serializeAvrFloat64(outbuffer + offset, vector->x);
+    offset += serializeAvrFloat64(outbuffer + offset, vector->y);
+    offset += serializeAvrFloat64(outbuffer + offset, vector->z);
+    return offset;
+}
+
+/* **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** */
+
+// // https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/geometry_msgs/Twist.h
+
+int serializeRosTwist(unsigned char *outbuffer , const RosTwist* twist)
+{
+    int offset = 0;
+    offset += serializeVector3(outbuffer+ offset, &twist->linear);
+    offset += serializeVector3(outbuffer + offset ,&twist->angular );
     return offset;
 }
