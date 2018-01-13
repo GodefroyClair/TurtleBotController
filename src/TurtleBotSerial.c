@@ -283,10 +283,7 @@ int sendMessage( int fd, int topic, const unsigned char* msgBuffer , size_t mess
         fprintf(stderr, "[sendMessage] Warning : message size (%zi) exceeds MAX_PAYLOAD_SIZE  (%zi) " , messageSize , MAX_PAYLOAD_SIZE);
         return 0;
     }
-    
-    
-    
-                                        ;
+                                    ;
     const size_t totalMsgSize = MSG_HeaderSize + messageSize;
     
     // msg_len_checksum = 255 - ( ((length&255) + (length>>8))%256 )
