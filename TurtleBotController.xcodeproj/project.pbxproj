@@ -10,7 +10,7 @@
 		5908986C200E5592004780FF /* RosMessages.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53012007DD6D00BDBC16 /* RosMessages.c */; };
 		5908986D200E5592004780FF /* TurtleBotSerial.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53042007DED600BDBC16 /* TurtleBotSerial.c */; };
 		5908986F200E5592004780FF /* libGroundBase.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 59AB111D200632800030AFC0 /* libGroundBase.dylib */; };
-		59089876200E55A2004780FF /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 59089875200E55A2004780FF /* main.c */; };
+		59089879200E565E004780FF /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 59089878200E565E004780FF /* main.c */; };
 		591B53022007DD6D00BDBC16 /* RosMessages.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53012007DD6D00BDBC16 /* RosMessages.c */; };
 		591B53052007DED600BDBC16 /* TurtleBotSerial.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53042007DED600BDBC16 /* TurtleBotSerial.c */; };
 		591B53082008B4C100BDBC16 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53072008B4C000BDBC16 /* main.c */; };
@@ -40,7 +40,7 @@
 
 /* Begin PBXFileReference section */
 		59089874200E5592004780FF /* GBTurtleBotController copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "GBTurtleBotController copy"; sourceTree = BUILT_PRODUCTS_DIR; };
-		59089875200E55A2004780FF /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		59089878200E565E004780FF /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = GBExample/main.c; sourceTree = SOURCE_ROOT; };
 		591B53002007CD9700BDBC16 /* RosMessages.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RosMessages.h; sourceTree = "<group>"; };
 		591B53012007DD6D00BDBC16 /* RosMessages.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = RosMessages.c; sourceTree = "<group>"; };
 		591B53032007DED600BDBC16 /* TurtleBotSerial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TurtleBotSerial.h; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 		59089877200E55A7004780FF /* GBExample */ = {
 			isa = PBXGroup;
 			children = (
-				59089875200E55A2004780FF /* main.c */,
+				59089878200E565E004780FF /* main.c */,
 			);
 			name = GBExample;
 			path = "New Group";
@@ -204,9 +204,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59089879200E565E004780FF /* main.c in Sources */,
 				5908986C200E5592004780FF /* RosMessages.c in Sources */,
 				5908986D200E5592004780FF /* TurtleBotSerial.c in Sources */,
-				59089876200E55A2004780FF /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
