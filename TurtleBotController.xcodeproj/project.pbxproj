@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5908986C200E5592004780FF /* RosMessages.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53012007DD6D00BDBC16 /* RosMessages.c */; };
+		5908986D200E5592004780FF /* TurtleBotSerial.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53042007DED600BDBC16 /* TurtleBotSerial.c */; };
+		5908986F200E5592004780FF /* libGroundBase.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 59AB111D200632800030AFC0 /* libGroundBase.dylib */; };
+		59089876200E55A2004780FF /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 59089875200E55A2004780FF /* main.c */; };
 		591B53022007DD6D00BDBC16 /* RosMessages.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53012007DD6D00BDBC16 /* RosMessages.c */; };
 		591B53052007DED600BDBC16 /* TurtleBotSerial.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53042007DED600BDBC16 /* TurtleBotSerial.c */; };
 		591B53082008B4C100BDBC16 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 591B53072008B4C000BDBC16 /* main.c */; };
@@ -14,6 +18,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		59089870200E5592004780FF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		59AB11102006323E0030AFC0 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -26,6 +39,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		59089874200E5592004780FF /* GBTurtleBotController copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "GBTurtleBotController copy"; sourceTree = BUILT_PRODUCTS_DIR; };
+		59089875200E55A2004780FF /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		591B53002007CD9700BDBC16 /* RosMessages.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RosMessages.h; sourceTree = "<group>"; };
 		591B53012007DD6D00BDBC16 /* RosMessages.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = RosMessages.c; sourceTree = "<group>"; };
 		591B53032007DED600BDBC16 /* TurtleBotSerial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TurtleBotSerial.h; sourceTree = "<group>"; };
@@ -36,6 +51,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5908986E200E5592004780FF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5908986F200E5592004780FF /* libGroundBase.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		59AB110F2006323E0030AFC0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -47,6 +70,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		59089877200E55A7004780FF /* GBExample */ = {
+			isa = PBXGroup;
+			children = (
+				59089875200E55A2004780FF /* main.c */,
+			);
+			name = GBExample;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		591B52FD2007CAD200BDBC16 /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -69,6 +101,7 @@
 		59AB11092006323E0030AFC0 = {
 			isa = PBXGroup;
 			children = (
+				59089877200E55A7004780FF /* GBExample */,
 				591B53062008B4C000BDBC16 /* example */,
 				591B52FD2007CAD200BDBC16 /* src */,
 				59AB11132006323E0030AFC0 /* Products */,
@@ -80,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				59AB11122006323E0030AFC0 /* TurtleBotController */,
+				59089874200E5592004780FF /* GBTurtleBotController copy */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +129,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		59089869200E5592004780FF /* GBTurtleBotController copy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 59089871200E5592004780FF /* Build configuration list for PBXNativeTarget "GBTurtleBotController copy" */;
+			buildPhases = (
+				5908986A200E5592004780FF /* Sources */,
+				5908986E200E5592004780FF /* Frameworks */,
+				59089870200E5592004780FF /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "GBTurtleBotController copy";
+			productName = TurtleBotController;
+			productReference = 59089874200E5592004780FF /* GBTurtleBotController copy */;
+			productType = "com.apple.product-type.tool";
+		};
 		59AB11112006323E0030AFC0 /* TurtleBotController */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 59AB11192006323E0030AFC0 /* Build configuration list for PBXNativeTarget "TurtleBotController" */;
@@ -121,6 +172,9 @@
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Manuel Deneu";
 				TargetAttributes = {
+					59089869200E5592004780FF = {
+						ProvisioningStyle = Automatic;
+					};
 					59AB11112006323E0030AFC0 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
@@ -140,11 +194,22 @@
 			projectRoot = "";
 			targets = (
 				59AB11112006323E0030AFC0 /* TurtleBotController */,
+				59089869200E5592004780FF /* GBTurtleBotController copy */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5908986A200E5592004780FF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5908986C200E5592004780FF /* RosMessages.c in Sources */,
+				5908986D200E5592004780FF /* TurtleBotSerial.c in Sources */,
+				59089876200E55A2004780FF /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		59AB110E2006323E0030AFC0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -158,6 +223,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		59089872200E5592004780FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		59089873200E5592004780FF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		59AB11172006323E0030AFC0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -284,6 +365,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		59089871200E5592004780FF /* Build configuration list for PBXNativeTarget "GBTurtleBotController copy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				59089872200E5592004780FF /* Debug */,
+				59089873200E5592004780FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		59AB110D2006323E0030AFC0 /* Build configuration list for PBXProject "TurtleBotController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
