@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 #include <GBThread.h>
+#include <GBTimer.h>
 #include <GBFDSource.h>
 #include <GBRunLoop.h>
 #include <unistd.h> // write read close
@@ -106,6 +107,11 @@ static void turtleMain( GBThread *self)
     runProcessLoop( context.fd, &stop, onData);
 }
 
+static void onTime( GBRunLoopSource* source , GBRunLoopSourceNotification notification)
+{
+    sendTopicsRequest(context.fd);
+}
+
 static void onKey( GBRunLoopSource* source , GBRunLoopSourceNotification notification)
 {
     GBFDSource* src = (GBFDSource*) source;
@@ -179,9 +185,12 @@ int main(int argc, const char * argv[])
     
     GBFDSource* inSource = GBFDSourceInitWithFD(STDIN_FILENO, onKey);
     
+    GBTimer *statusTimer = GBTimerInit(onTime);
+    GBTimerSetIntervalMS(statusTimer, 6000);
     
     GBRunLoop* rl = GBRunLoopInit();
     GBRunLoopAddSource(rl, inSource);
+    GBRunLoopAddSource(rl, statusTimer);
     
     GBRunLoopRun(rl);
     
@@ -192,6 +201,7 @@ int main(int argc, const char * argv[])
     
     close( context.fd);
     
+    GBRelease(statusTimer);
     GBRelease(turtleThread);
     GBRelease(inSource);
     GBRelease(rl);
