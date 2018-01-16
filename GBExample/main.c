@@ -134,10 +134,14 @@ static void onKey( GBRunLoopSource* source , GBRunLoopSourceNotification notific
         }
         else if( buf[0] == 'q')
         {
+            context.cmd.angular.x += 0.1;
+            sendCommand(&context);
             printf("turn left\n");
         }
         else if( buf[0] == 'd')
         {
+            context.cmd.angular.x -= 0.1;
+            sendCommand(&context);
             printf("turn right\n");
         }
         else if( buf[0] == ' ')
@@ -180,6 +184,11 @@ int main(int argc, const char * argv[])
     GBRunLoopAddSource(rl, inSource);
     
     GBRunLoopRun(rl);
+    
+    memset(&context.cmd, 0, sizeof(RosTwist));
+    sendCommand(&context);
+    
+    sleep(1);
     
     close( context.fd);
     
