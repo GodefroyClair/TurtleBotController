@@ -17,7 +17,12 @@
 
 
 static int fd  = 0;
-// return 0 to stop the loop
+
+static RosTwist cmd = {0};
+//memset(&cmd, 0, sizeof(RosTwist));
+
+//cmd.linear.x = 0;
+
 static int onData( int topicID , unsigned char *inbuffer )
 {
     //printf("Received Topic #%i\n" , topicID);
@@ -28,7 +33,6 @@ static int onData( int topicID , unsigned char *inbuffer )
     }
     else if( topicID == ID_cmd_vel_rc100)
     {
-        
         
         RosTwist twist;
         
@@ -45,10 +49,6 @@ static int onData( int topicID , unsigned char *inbuffer )
         
         
         
-        RosTwist cmd;
-        memset(&cmd, 0, sizeof(RosTwist));
-        
-        cmd.linear.x = 0;
         
         
         static unsigned char out[MAX_PAYLOAD_SIZE];
@@ -58,7 +58,7 @@ static int onData( int topicID , unsigned char *inbuffer )
         
         
         if (sendMessage(fd, 100, out, size) == 0)
-        //if(sendCommands(fd, &cmd) == 0)
+            //if(sendCommands(fd, &cmd) == 0)
         {
             perror("Send");
         }
@@ -69,13 +69,12 @@ static int onData( int topicID , unsigned char *inbuffer )
 
 int main(int argc, const char * argv[])
 {
-    
     const char* portName = argc > 1? argv[1] : "/dev/tty.usbmodem14441";
     
     printf("try open '%s' \n" ,portName);
     
     fd = openSerialPort(portName);
-   
+    
     if( fd < 0 )
     {
         printf("Error while opening port '%s'\n" , portName);
@@ -86,14 +85,11 @@ int main(int argc, const char * argv[])
     {
         printf("Error sending topics request\n");
     }
-
+    
     
     int stop = 0;
     runProcessLoop(fd, &stop, onData);
-
+    
     close(fd);
     return 0;
 }
-
-
-
