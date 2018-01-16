@@ -6,18 +6,17 @@ CFLAGS=   $(BUILD_CONFIG)  -Wall -Wextra
 CFLAGS+=  -pedantic  -D_REENTRANT
 
 
-CFLAGS+=  -I../src/
-# -I/usr/local/include/GroundBase -I/usr/local/include/FlyKit/ 
+CFLAGS+=  -I../src/  -I/usr/local/include/GroundBase #-I/usr/local/include/FlyKit/ 
 
-#LDFLAGS=  -lpthread -lFlyKit -lGroundBase 
-
+LDFLAGS=  -lGroundBase 
+#-lpthread -lFlyKit
 
 SOURCES= main.c \
 		../src/RosMessages.c \
 		../src/TurtleBotSerial.c \
 
 OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE= Example1
+EXECUTABLE= GBExample
 
 ll: $(SOURCES) $(EXECUTABLE)
     
