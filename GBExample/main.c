@@ -134,13 +134,13 @@ static void onKey( GBRunLoopSource* source , GBRunLoopSourceNotification notific
         }
         else if( buf[0] == 'q')
         {
-            context.cmd.angular.x += 0.1;
+            context.cmd.angular.z += 0.1;
             sendCommand(&context);
             printf("turn left\n");
         }
         else if( buf[0] == 'd')
         {
-            context.cmd.angular.x -= 0.1;
+            context.cmd.angular.z -= 0.1;
             sendCommand(&context);
             printf("turn right\n");
         }
