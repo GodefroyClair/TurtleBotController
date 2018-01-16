@@ -10,6 +10,8 @@
 #define RosMessages_h
 
 
+#define REQ_ALIGNMENT __attribute__((packed)) __attribute__((aligned(4)))
+
 /*
  Definitions are mostly taken from here :
  https://github.com/ROBOTIS-GIT/OpenCR/tree/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/sensor_msgs
@@ -24,7 +26,23 @@ typedef enum
     
     ID_SensorState = 125,
     ID_IMU = 126,
+    ID_cmd_vel_rc100  = 127,
+    ID_Odom = 128,
+    ID_joint_states = 129
     
+    /*
+     Received Topic #0
+     Got topic_id 125 topic_name 'sensor_state' message_type 'turtlebot3_msgs/SensorState'
+     Received Topic #0
+     Got topic_id 126 topic_name 'imu' message_type 'sensor_msgs/Imu'
+     Received Topic #0
+     Got topic_id 127 topic_name 'cmd_vel_rc100' message_type 'geometry_msgs/Twist'
+     Received Topic #0
+     Got topic_id 128 topic_name 'odom' message_type 'nav_msgs/Odometry'
+     Received Topic #0
+     Got topic_id 129 topic_name 'joint_states' message_type 'sensor_msgs/JointState'
+     
+     */
     /*
      127?
      128
@@ -47,7 +65,7 @@ typedef struct
 {
     uint32_t sec;
     uint32_t nsec;
-}RosTime;
+} RosTime;
 
 // https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/std_msgs/Header.h
 typedef struct
@@ -126,6 +144,6 @@ int serializeAvrFloat64(unsigned char* outbuffer, const float f);
 
 
 int serializeRosTwist(unsigned char *outbuffer , const RosTwist* twist);
-
+int deserializeRosTwist(unsigned char *inbuffer , RosTwist* twist);
 
 #endif /* RosMessages_h */

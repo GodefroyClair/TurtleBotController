@@ -269,7 +269,7 @@ int sendCommands( int fd, const RosTwist* cmd)
     if( fd <= 0 || cmd == NULL)
         return 0;
     
-    return 1;
+    return sendMessage(fd, ID_cmd_vel_rc100, (const unsigned char*) cmd, sizeof(cmd));
 }
 
 
@@ -284,14 +284,28 @@ int sendMessage( int fd, int topic, const unsigned char* msgBuffer , size_t mess
         return 0;
     }
                                     ;
-    const size_t totalMsgSize = MSG_HeaderSize + messageSize;
+    const size_t totalMsgSize = MSG_HeaderSize + messageSize + 1;
     
     // msg_len_checksum = 255 - ( ((length&255) + (length>>8))%256 )
-    const char msg_len_checksum = 255 - ( ((messageSize&255) + (messageSize>>8))%256 );
+    const uint32_t l =  (messageSize&255) + (messageSize>>8);
+    
+    const char msg_len_checksum = 255 - ( l%256 );
     
     
-    const char msg_checksum = 0;
-    static uint8_t msgBuf[MAX_PAYLOAD_SIZE + MSG_HeaderSize] = { 0};
+    uint32_t sumCh = topic&255;
+    sumCh += topic>>8;
+    
+    
+    for( size_t i =0;i<messageSize; ++i )
+    {
+        sumCh += msgBuffer[i];
+    }
+    //msg_checksum = 255 - ( ((topic&255) + (topic>>8) + sum([ord(x) for x in msg]))%256 )
+    const char msg_checksum = 255 - ( sumCh % 256 );
+                                       
+    
+    
+    static char msgBuf[MAX_PAYLOAD_SIZE + MSG_HeaderSize] = { 0};
     
     memset(msgBuf, 0,MAX_PAYLOAD_SIZE);
 
@@ -313,6 +327,21 @@ int sendMessage( int fd, int topic, const unsigned char* msgBuffer , size_t mess
      data = "\xff" + self.protocol_ver  + chr(length&255) + chr(length>>8) + chr(msg_len_checksum) + chr(topic&255) + chr(topic>>8)
      data = data + msg + chr(msg_checksum)
      self.port.write(data)
+     */
+    
+    /*
+    printf("send Message size %zi\n" , totalMsgSize);
+    
+    
+    for( size_t i=0; i<totalMsgSize;++i)
+    {
+        
+        if( i % 8 == 0)
+        {
+            printf("\n");
+        }
+        printf(" %x " , (unsigned char) msgBuf[i]);
+    }
      */
     
     return write(fd, msgBuf, totalMsgSize) == totalMsgSize;

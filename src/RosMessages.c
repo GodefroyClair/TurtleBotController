@@ -318,6 +318,14 @@ int serializeVector3(unsigned char *outbuffer, const RosVector3* vector)
 
 // // https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/geometry_msgs/Twist.h
 
+int deserializeRosTwist(unsigned char *inbuffer , RosTwist* twist)
+{
+    int offset = 0;
+    offset += deserializeVector3(inbuffer + offset, &twist->linear);//  this->linear.deserialize(inbuffer + offset);
+    offset += deserializeVector3(inbuffer + offset, &twist->angular );//this->angular.deserialize(inbuffer + offset);
+    return offset;
+}
+
 int serializeRosTwist(unsigned char *outbuffer , const RosTwist* twist)
 {
     int offset = 0;
