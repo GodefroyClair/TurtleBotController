@@ -33,12 +33,13 @@ typedef struct
 static TurtleContext context;
 
 // return 0 to stop the loop
-static int onData( int topicID , unsigned char *inbuffer )
+static int onData( int topicID , unsigned char *inbuffer  , size_t inBufferSize)
 {
     //printf("Received Topic #%i\n" , topicID);
     
     if (topicID == 0)
     {
+        printf("received topic buffer Size is %zi , expected %zi\n " , inBufferSize , sizeof(RosTopicInfo));
         deserializeTopic(inbuffer);
     }
     else if( topicID == ID_cmd_vel_rc100)

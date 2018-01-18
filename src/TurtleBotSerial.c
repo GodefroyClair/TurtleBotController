@@ -207,7 +207,7 @@ int runProcessLoop( int fd , int* stopFlag , OnDataCallback dataCallback)
         }
         
         
-        if(dataCallback(topic_id , msgBuf) == 0)
+        if(dataCallback(topic_id , msgBuf , payloadLen) == 0)
         {
             run = 0;
             break;

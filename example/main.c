@@ -23,7 +23,7 @@ static RosTwist cmd = {0};
 
 //cmd.linear.x = 0;
 
-static int onData( int topicID , unsigned char *inbuffer )
+static int onData( int topicID , unsigned char *inbuffer , size_t inbufferSize )
 {
     //printf("Received Topic #%i\n" , topicID);
     

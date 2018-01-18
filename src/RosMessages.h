@@ -118,10 +118,6 @@ typedef struct
     
 } RosIMU;
 
-
-
-
-
 // https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/geometry_msgs/Twist.h
 // For usage example : check // https://github.com/ROBOTIS-GIT/turtlebot3/blob/master/turtlebot3_teleop/scripts/turtlebot3_teleop_key
 typedef struct

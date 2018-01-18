@@ -41,7 +41,7 @@
 + 1 // msg checksum
  */
 
-typedef int (*OnDataCallback)( int topicID , unsigned char *inbuffer );
+typedef int (*OnDataCallback)( int topicID , unsigned char *inbuffer , size_t inbufferSize );
 
 // returns -1 on error
 int openSerialPort( const char* portName);
