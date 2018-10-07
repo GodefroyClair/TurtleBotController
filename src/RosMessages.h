@@ -86,7 +86,7 @@ typedef struct
     
 }RosTopicInfo;
 
-// https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/geometry_msgs/Quaternion.h
+//  
 typedef struct
 {
     float x;
@@ -126,10 +126,23 @@ typedef struct
     RosVector3 angular;
 } RosTwist;
 
+// https://github.com/ROBOTIS-GIT/OpenCR/blob/aee618962039549d42f2663e0339f4d45291c4b6/arduino/opencr_fw/opencr_fw_arduino/src/arduino/libraries/turtlebot3_ros_lib/turtlebot3_msgs/SensorState.h
+typedef struct
+{
+    RosTime stamp;
+    uint8_t bumper;
+    uint8_t cliff;
+    uint8_t button;
+    int32_t left_encoder;
+    int32_t right_encoder;
+    float battery;
+    
+} RosSensorState;
+
 
 int deserializeTopic(unsigned char *inbuffer);
-int deserializeSensorState(unsigned char *inbuffer);
-int deserializeIMU(unsigned char *inbuffer);
+int deserializeSensorState(unsigned char *inbuffer , RosSensorState *state);
+int deserializeIMU(unsigned char *inbuffer , RosIMU *imu);
 int deserializeHeader(unsigned char *inbuffer, RosHeader* header);
 
 int deserializeVector3(unsigned char *inbuffer , RosVector3* vector);
@@ -137,7 +150,6 @@ int serializeVector3(unsigned char *outbuffer, const RosVector3* vector);
 
 int deserializeAvrFloat64(const unsigned char* inbuffer, float* f);
 int serializeAvrFloat64(unsigned char* outbuffer, const float f);
-
 
 int serializeRosTwist(unsigned char *outbuffer , const RosTwist* twist);
 int deserializeRosTwist(unsigned char *inbuffer , RosTwist* twist);

@@ -5,9 +5,8 @@
 //  Created by Manuel Deneu on 11/01/2018.
 //  Copyright © 2018 Manuel Deneu. All rights reserved.
 //
-
-#include <sys/termios.h>
 #include <string.h>
+#include <sys/termios.h>
 #include <fcntl.h> // O_RDWR | O_NOCTTY | O_NDELAY
 #include <unistd.h>
 #include "TurtleBotSerial.h"
@@ -103,7 +102,6 @@ int runProcessLoop( int fd , int* stopFlag , OnDataCallback dataCallback)
     {
         
         char startByte = 0;
-        
         ssize_t ret = read(fd, &startByte, 1);
         
         if( ret == 0)

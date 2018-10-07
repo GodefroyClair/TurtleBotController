@@ -11,7 +11,6 @@
 
 #include <unistd.h> // write read close
 #include <string.h> // memset
-
 #include "TurtleBotSerial.h"
 #include "RosMessages.h"
 
@@ -46,11 +45,7 @@ static int onData( int topicID , unsigned char *inbuffer , size_t inbufferSize )
                twist.angular.y,
                twist.angular.z
                );
-        
-        
-        
-        
-        
+
         static unsigned char out[MAX_PAYLOAD_SIZE];
         memset(&out, 0, MAX_PAYLOAD_SIZE);
         
@@ -70,7 +65,6 @@ static int onData( int topicID , unsigned char *inbuffer , size_t inbufferSize )
 int main(int argc, const char * argv[])
 {
     const char* portName = argc > 1? argv[1] : "/dev/tty.usbmodem14441";
-    
     printf("try open '%s' \n" ,portName);
     
     fd = openSerialPort(portName);

@@ -69,9 +69,6 @@ static int onData( int topicID , unsigned char *inbuffer  , size_t inBufferSize)
 
 static void sendCommand( TurtleContext* context)
 {
-    
-    
-    
     static unsigned char out[MAX_PAYLOAD_SIZE];
     memset(&out, 0, MAX_PAYLOAD_SIZE);
     
